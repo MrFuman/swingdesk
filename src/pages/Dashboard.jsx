@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
+import { PieChart, Pie, Cell, Tooltip } from 'recharts'
 import { useTransactions } from '../hooks/useTransactions'
 import { useSeedCategories } from '../hooks/useCategories'
 import TransactionForm from '../components/TransactionForm'
@@ -160,42 +160,53 @@ export default function Dashboard() {
             textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 12,
           }}>Spending breakdown</p>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            {/* Donut chart */}
-            <div style={{ flexShrink: 0, width: 110, height: 110 }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={chartData} dataKey="value" nameKey="name"
-                    cx="50%" cy="50%" outerRadius={50} innerRadius={24} paddingAngle={2}>
-                    {chartData.map((entry, i) => (
-                      <Cell key={i} fill={entry.color} strokeWidth={0} />
-                    ))}
-                  </Pie>
-                  <Tooltip content={<CustomTooltip />} />
-                </PieChart>
-              </ResponsiveContainer>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            {/* Fixed size donut — no ResponsiveContainer */}
+            <div style={{ flexShrink: 0 }}>
+              <PieChart width={110} height={110}>
+                <Pie
+                  data={chartData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx={55}
+                  cy={55}
+                  outerRadius={50}
+                  innerRadius={26}
+                  paddingAngle={2}>
+                  {chartData.map((entry, i) => (
+                    <Cell key={i} fill={entry.color} strokeWidth={0} />
+                  ))}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+              </PieChart>
             </div>
 
             {/* Category list */}
-            <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 7 }}>
+            <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
               {chartData.slice(0, 4).map((d, i) => {
                 const pct = totalExpense > 0 ? ((d.value / totalExpense) * 100).toFixed(0) : 0
                 return (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: d.color, flexShrink: 0 }} />
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                    <div style={{
+                      width: 6, height: 6, borderRadius: '50%',
+                      background: d.color, flexShrink: 0,
+                    }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
                         <span style={{
                           fontSize: 11, color: 'var(--text-primary)', fontWeight: 500,
                           overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                          maxWidth: '60%',
+                          maxWidth: '65%',
                         }}>{d.name}</span>
-                        <span className="mono" style={{ fontSize: 10, color: 'var(--text-secondary)', flexShrink: 0 }}>
+                        <span className="mono" style={{ fontSize: 10, color: 'var(--text-secondary)' }}>
                           {pct}%
                         </span>
                       </div>
                       <div style={{ height: 2, borderRadius: 1, background: 'var(--border-mid)', overflow: 'hidden' }}>
-                        <div style={{ height: '100%', borderRadius: 1, width: `${pct}%`, background: d.color }} />
+                        <div style={{
+                          height: '100%', borderRadius: 1,
+                          width: `${pct}%`, background: d.color,
+                        }} />
                       </div>
                     </div>
                   </div>
