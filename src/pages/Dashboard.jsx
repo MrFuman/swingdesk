@@ -57,7 +57,7 @@ export default function Dashboard() {
       {/* Header */}
       <div className="fade-up" style={{
         display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', marginBottom: 20,
+        justifyContent: 'space-between', marginBottom: 16,
       }}>
         <MonthPicker value={month} onChange={setMonth} />
         <button onClick={() => setShowForm(true)} style={{
@@ -67,6 +67,7 @@ export default function Dashboard() {
           fontSize: 13, fontWeight: 600, cursor: 'pointer',
           fontFamily: 'var(--font-sans)',
           boxShadow: '0 0 20px #22c55e30',
+          flexShrink: 0,
         }}>
           <Plus size={14} /> Add
         </button>
@@ -80,9 +81,9 @@ export default function Dashboard() {
         ].map(({ label, value, color, icon }, i) => (
           <div key={label} className={`fade-up-${i + 1}`} style={{
             background: 'var(--bg-card)', border: '1px solid var(--border)',
-            borderRadius: 14, padding: '16px 18px',
+            borderRadius: 14, padding: '14px 16px',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
               <p style={{
                 fontSize: 10, color: 'var(--text-secondary)',
                 textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 500,
@@ -90,7 +91,7 @@ export default function Dashboard() {
               {icon}
             </div>
             <p className="mono" style={{
-              fontSize: 18, fontWeight: 600, color,
+              fontSize: 17, fontWeight: 600, color,
               letterSpacing: '-0.02em', lineHeight: 1,
             }}>
               RM {value.toLocaleString('en-MY', { minimumFractionDigits: 2 })}
@@ -102,9 +103,9 @@ export default function Dashboard() {
       {/* Balance */}
       <div className="fade-up-3" style={{
         background: 'var(--bg-card)', border: '1px solid var(--border)',
-        borderRadius: 14, padding: '16px 18px', marginBottom: 10,
+        borderRadius: 14, padding: '14px 16px', marginBottom: 10,
       }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 6 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
           <p style={{
             fontSize: 10, color: 'var(--text-secondary)',
             textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 500,
@@ -120,18 +121,15 @@ export default function Dashboard() {
           )}
         </div>
         <p className="mono" style={{
-          fontSize: 28, fontWeight: 700, letterSpacing: '-0.03em',
+          fontSize: 26, fontWeight: 700, letterSpacing: '-0.03em',
           color: balance >= 0 ? 'var(--text-primary)' : 'var(--red)',
-          marginBottom: 12,
+          marginBottom: 10,
         }}>
           {balance < 0 ? '−' : ''}RM {Math.abs(balance).toLocaleString('en-MY', { minimumFractionDigits: 2 })}
         </p>
         {totalIncome > 0 && (
           <>
-            <div style={{
-              height: 4, borderRadius: 2,
-              background: 'var(--border-mid)', overflow: 'hidden',
-            }}>
+            <div style={{ height: 4, borderRadius: 2, background: 'var(--border-mid)', overflow: 'hidden' }}>
               <div style={{
                 height: '100%', borderRadius: 2,
                 width: `${spendPct}%`,
@@ -155,20 +153,20 @@ export default function Dashboard() {
       {chartData.length > 0 && (
         <div className="fade-up-3" style={{
           background: 'var(--bg-card)', border: '1px solid var(--border)',
-          borderRadius: 14, padding: '16px 18px', marginBottom: 10,
+          borderRadius: 14, padding: '14px 16px', marginBottom: 10,
         }}>
           <p style={{
             fontSize: 10, fontWeight: 500, color: 'var(--text-secondary)',
-            textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 14,
+            textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 12,
           }}>Spending breakdown</p>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            {/* Donut chart — smaller */}
-            <div style={{ flexShrink: 0, width: 120, height: 120 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            {/* Donut chart */}
+            <div style={{ flexShrink: 0, width: 110, height: 110 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={chartData} dataKey="value" nameKey="name"
-                    cx="50%" cy="50%" outerRadius={55} innerRadius={28} paddingAngle={2}>
+                    cx="50%" cy="50%" outerRadius={50} innerRadius={24} paddingAngle={2}>
                     {chartData.map((entry, i) => (
                       <Cell key={i} fill={entry.color} strokeWidth={0} />
                     ))}
@@ -178,30 +176,28 @@ export default function Dashboard() {
               </ResponsiveContainer>
             </div>
 
-            {/* Category breakdown list */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {chartData.slice(0, 5).map((d, i) => {
+            {/* Category list */}
+            <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 7 }}>
+              {chartData.slice(0, 4).map((d, i) => {
                 const pct = totalExpense > 0 ? ((d.value / totalExpense) * 100).toFixed(0) : 0
                 return (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div style={{ width: 7, height: 7, borderRadius: '50%', background: d.color, flexShrink: 0 }} />
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: d.color, flexShrink: 0 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-                        <span style={{ fontSize: 11, color: 'var(--text-primary)', fontWeight: 500 }}>{d.name}</span>
-                        <span className="mono" style={{ fontSize: 10, color: 'var(--text-secondary)' }}>
+                        <span style={{
+                          fontSize: 11, color: 'var(--text-primary)', fontWeight: 500,
+                          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                          maxWidth: '60%',
+                        }}>{d.name}</span>
+                        <span className="mono" style={{ fontSize: 10, color: 'var(--text-secondary)', flexShrink: 0 }}>
                           {pct}%
                         </span>
                       </div>
                       <div style={{ height: 2, borderRadius: 1, background: 'var(--border-mid)', overflow: 'hidden' }}>
-                        <div style={{
-                          height: '100%', borderRadius: 1,
-                          width: `${pct}%`, background: d.color,
-                        }} />
+                        <div style={{ height: '100%', borderRadius: 1, width: `${pct}%`, background: d.color }} />
                       </div>
                     </div>
-                    <span className="mono" style={{ fontSize: 10, color: 'var(--text-secondary)', flexShrink: 0 }}>
-                      RM {d.value.toFixed(0)}
-                    </span>
                   </div>
                 )
               })}
@@ -216,7 +212,7 @@ export default function Dashboard() {
         borderRadius: 14, overflow: 'hidden',
       }}>
         <div style={{
-          padding: '14px 18px 12px', borderBottom: '1px solid var(--border)',
+          padding: '12px 16px 10px', borderBottom: '1px solid var(--border)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
           <p style={{
@@ -231,37 +227,39 @@ export default function Dashboard() {
         </div>
 
         {loading && (
-          <p style={{ padding: '20px 18px', fontSize: 13, color: 'var(--text-secondary)' }}>Loading...</p>
+          <p style={{ padding: '20px 16px', fontSize: 13, color: 'var(--text-secondary)' }}>Loading...</p>
         )}
         {!loading && transactions.length === 0 && (
-          <div style={{ padding: '32px 18px', textAlign: 'center' }}>
+          <div style={{ padding: '28px 16px', textAlign: 'center' }}>
             <p style={{ fontSize: 24, marginBottom: 8 }}>💸</p>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>No transactions this month</p>
           </div>
         )}
 
         {transactions.slice(0, 6).map((t, i) => (
-          <div key={t.id}
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '11px 18px',
-              borderBottom: i < Math.min(transactions.length, 6) - 1 ? '1px solid var(--border)' : 'none',
-              transition: 'background 0.1s',
-            }}
+          <div key={t.id} style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '10px 16px',
+            borderBottom: i < Math.min(transactions.length, 6) - 1 ? '1px solid var(--border)' : 'none',
+            transition: 'background 0.1s',
+          }}
             onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-elevated)'}
             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0, flex: 1 }}>
               <div style={{
-                width: 34, height: 34, borderRadius: 9, flexShrink: 0,
+                width: 32, height: 32, borderRadius: 9, flexShrink: 0,
                 background: t.type === 'income' ? '#22c55e12' : '#ef444412',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 16,
+                fontSize: 15,
               }}>
                 {t.categories?.icon || '📦'}
               </div>
-              <div>
-                <p style={{ fontSize: 13, color: 'var(--text-primary)', fontWeight: 500 }}>
+              <div style={{ minWidth: 0 }}>
+                <p style={{
+                  fontSize: 13, color: 'var(--text-primary)', fontWeight: 500,
+                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                }}>
                   {t.description}
                 </p>
                 <p style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 1 }}>
@@ -270,9 +268,9 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0, marginLeft: 8 }}>
               <p className="mono" style={{
-                fontSize: 13, fontWeight: 600,
+                fontSize: 12, fontWeight: 600,
                 color: t.type === 'income' ? 'var(--accent)' : 'var(--red)',
               }}>
                 {t.type === 'income' ? '+' : '−'}RM {Number(t.amount).toFixed(2)}
@@ -280,7 +278,7 @@ export default function Dashboard() {
               <button onClick={() => deleteTransaction(t.id)} style={{
                 background: 'none', border: 'none', cursor: 'pointer',
                 color: 'var(--text-muted)', display: 'flex', padding: 2,
-                transition: 'color 0.15s',
+                transition: 'color 0.15s', flexShrink: 0,
               }}
                 onMouseEnter={e => e.currentTarget.style.color = 'var(--red)'}
                 onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
