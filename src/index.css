@@ -93,4 +93,30 @@ input[type='number']::-webkit-inner-spin-button {
 }
 input[type='number'] {
   -moz-appearance: textfield;
+}/* Mobile optimization */
+@media (max-width: 480px) {
+  :root {
+    --header-h: 52px;
+  }
+
+  /* Fix header title size */
+  header p {
+    font-size: 17px !important;
+  }
+
+  /* Prevent overflow */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Better touch targets */
+  button {
+    min-height: 36px;
+  }
+
+  /* Fix mono font size on mobile */
+  .mono {
+    letter-spacing: -0.01em;
+  }
 }

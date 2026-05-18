@@ -286,7 +286,7 @@ export default function Layout() {
         </button>
 
         <p style={{
-          flex: 1, fontSize: 15, fontWeight: 600,
+          flex: 1, fontSize: 17, fontWeight: 600,
           color: 'var(--text-primary)', letterSpacing: '-0.02em',
           fontFamily: 'var(--font-sans)',
         }}>{title}</p>
@@ -302,7 +302,7 @@ export default function Layout() {
 
       <main style={{
         minHeight: '100vh', maxWidth: 680, margin: '0 auto',
-        padding: `calc(var(--header-h) + 20px) 16px 32px`,
+        padding: `calc(var(--header-h) + 16px) 12px 32px`,
       }}>
         <Outlet />
       </main>
